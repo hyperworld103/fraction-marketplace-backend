@@ -1,0 +1,1537 @@
+{
+    "swagger" : "2.0",
+    "info" : {
+      "description" : "Cryptotrades API Doc",
+      "version" : "v1",
+      "title" : "Cryptotrades"
+    },
+    "host" : "protomock.com:5000",
+    "basePath" : "/",
+    "schemes" : [ "http", "https" ],
+    "tags" : [
+      {
+          "name" : "user"
+      },
+      {
+        "name" : "category"
+      },
+      {
+        "name" : "collection"
+      },
+      {
+        "name" : "item"
+      },
+      {
+        "name" : "admin"
+      }],
+    "paths" : {
+      "/user/login" : {
+        "post" : {
+          "tags" : [ "user" ],
+          "summary" : "User Login",
+          "description" : "",
+          "operationId" : "login",
+          "consumes" : [ "application/x-www-form-urlencoded" ],
+          "produces" : [ "application/json" ],
+          "parameters" : [ {
+              "name" : "username",
+              "in" : "formData",
+              "description" : "Enter Username",
+              "required" : true,
+              "type" : "string"
+            },
+            {
+              "name" : "password",
+              "in" : "formData",
+              "description" : "Enter Password",
+              "required" : true,
+              "type" : "string"
+            }],
+          "responses" : {
+            "405" : {
+              "description" : "Invalid input"
+            }
+          }
+        }
+      },
+      "/user/register" : {
+        "post" : {
+          "tags" : [ "user" ],
+          "summary" : "Register new user",
+          "description" : "",
+          "operationId" : "registration",
+          "consumes" : [ "application/x-www-form-urlencoded" ],
+          "produces" : [ "application/json" ],
+          "parameters" : [ {
+              "name" : "username",
+              "in" : "formData",
+              "description" : "Enter Username",
+              "required" : true,
+              "type" : "string"
+            },
+            {
+              "name" : "first_name",
+              "in" : "formData",
+              "description" : "Enter Firstname",
+              "required" : true,
+              "type" : "string"
+            },
+            {
+              "name" : "last_name",
+              "in" : "formData",
+              "description" : "Enter Lastname",
+              "required" : true,
+              "type" : "string"
+            },
+            {
+              "name" : "email",
+              "in" : "formData",
+              "description" : "Enter Email",
+              "required" : true,
+              "type" : "string"
+            },
+            {
+              "name" : "password",
+              "in" : "formData",
+              "description" : "Enter Password",
+              "required" : true,
+              "type" : "string"
+            },
+            {
+              "name" : "phone",
+              "in" : "formData",
+              "description" : "Enter Phone number",
+              "required" : false,
+              "type" : "string"
+            },
+            {
+              "name" : "dob",
+              "in" : "formData",
+              "description" : "Enter Date of birth (MM/DD/YYYY)",
+              "required" : false,
+              "type" : "string"
+            },
+            {
+              "name" : "profile_image",
+              "in" : "formData",
+              "description" : "Enter profile image name",
+              "required" : false,
+              "type" : "string"
+            },
+            {
+              "name" : "social_info",
+              "in" : "formData",
+              "description" : "Enter social information",
+              "required" : false,
+              "type" : "string"
+            },
+            {
+              "name" : "device_info",
+              "in" : "formData",
+              "description" : "Enter device information",
+              "required" : false,
+              "type" : "string"
+            }],
+          "responses" : {
+            "405" : {
+              "description" : "Invalid input"
+            }
+          }
+        },
+        "get" : {
+          "tags" : [ "user" ],
+          "summary" : "list all users",
+          "description" : "",
+          "operationId" : "list",
+          "consumes" : [ "application/x-www-form-urlencoded" ],
+          "produces" : [ "application/json" ],
+          "parameters" : [{
+              "name" : "user_id",
+              "in" : "query",
+              "description" : "Enter User ID",
+              "required" : false,
+              "type" : "string"
+            },
+            {
+              "name" : "page",
+              "in" : "query",
+              "description" : "Enter Page Number",
+              "required" : false,
+              "type" : "string"
+            },
+            {
+              "name" : "keyword",
+              "in" : "query",
+              "description" : "Enter keyword",
+              "required" : false,
+              "type" : "string"
+            }],
+          "responses" : {
+            "405" : {
+              "description" : "Invalid input"
+            }
+          }
+        }
+      },
+      "/user/profile/{userId}" : {
+        "get" : {
+          "tags" : [ "user" ],
+          "summary" : "View Profile",
+          "description" : "",
+          "operationId" : "editprofile",
+          "consumes" : [ "application/x-www-form-urlencoded" ],
+          "produces" : [ "application/json" ],
+          "parameters" : [ 
+            {
+              "name" : "userId",
+              "in" : "path",
+              "description" : "",
+              "required" : true,
+              "type" : "string",
+              "default" : ""
+            }],
+          "responses" : {
+            "405" : {
+              "description" : "Invalid input"
+            }
+          }
+        }
+      },
+      
+      "/user/forgot" : {
+          "put" : {
+            "tags" : [ "user" ],
+            "summary" : "User Forgot Password",
+            "description" : "",
+            "operationId" : "forgot",
+            "consumes" : [ "application/x-www-form-urlencoded" ],
+            "produces" : [ "application/json" ],
+            "parameters" : [ {
+                "name" : "email",
+                "in" : "formData",
+                "description" : "Enter Email",
+                "required" : true,
+                "type" : "string"
+              }],
+            "responses" : {
+              "405" : {
+                "description" : "Invalid input"
+              }
+            }
+          }
+        },
+        "/user/reset" : {
+          "put" : {
+            "tags" : [ "user" ],
+            "summary" : "User Reset Password",
+            "description" : "",
+            "operationId" : "reset",
+            "consumes" : [ "application/x-www-form-urlencoded" ],
+            "produces" : [ "application/json" ],
+            "parameters" : [ 
+              {
+                "name" : "authorization",
+                "in" : "header",
+                "description" : "",
+                "required" : true,
+                "type" : "string",
+                "default" : ""
+              },
+              {
+                "name" : "newpassword",
+                "in" : "formData",
+                "description" : "Enter New Password",
+                "required" : true,
+                "type" : "string"
+              }],
+            "responses" : {
+              "405" : {
+                "description" : "Invalid input"
+              }
+            }
+          }
+        },
+        "/user/update/{userID}" : {
+          "put" : {
+            "tags" : [ "user" ],
+            "summary" : "Edit Profile",
+            "description" : "",
+            "operationId" : "editprofile",
+            "consumes" : [ "application/x-www-form-urlencoded" ],
+            "produces" : [ "application/json" ],
+            "parameters" : [ 
+              {
+                "name" : "userID",
+                "in" : "path",
+                "description" : "",
+                "required" : true,
+                "type" : "string",
+                "default" : ""
+              },
+              {
+                "name" : "authorization",
+                "in" : "header",
+                "description" : "",
+                "required" : true,
+                "type" : "string",
+                "default" : ""
+              },
+              {
+                "name" : "username",
+                "in" : "formData",
+                "description" : "Enter Username",
+                "required" : false,
+                "type" : "string"
+              },
+              {
+                "name" : "first_name",
+                "in" : "formData",
+                "description" : "Enter Firstname",
+                "required" : false,
+                "type" : "string"
+              },
+              {
+                "name" : "last_name",
+                "in" : "formData",
+                "description" : "Enter Lastname",
+                "required" : false,
+                "type" : "string"
+              },
+              {
+                "name" : "email",
+                "in" : "formData",
+                "description" : "Enter Email",
+                "required" : false,
+                "type" : "string"
+              },
+              {
+                "name" : "phone",
+                "in" : "formData",
+                "description" : "Enter Phone number",
+                "required" : false,
+                "type" : "string"
+              },
+              {
+                "name" : "dob",
+                "in" : "formData",
+                "description" : "Enter Date of birth (MM/DD/YYYY)",
+                "required" : false,
+                "type" : "string"
+              },
+              {
+                "name" : "profile_image",
+                "in" : "formData",
+                "description" : "Enter profile image name",
+                "required" : false,
+                "type" : "string"
+              },
+              {
+                "name" : "profile_cover",
+                "in" : "formData",
+                "description" : "Enter profile cover name",
+                "required" : false,
+                "type" : "string"
+              },
+              {
+                "name" : "social_info",
+                "in" : "formData",
+                "description" : "Enter social information",
+                "required" : false,
+                "type" : "string"
+              },
+              {
+                "name" : "device_info",
+                "in" : "formData",
+                "description" : "Enter device information",
+                "required" : false,
+                "type" : "string"
+              }],
+            "responses" : {
+              "405" : {
+                "description" : "Invalid input"
+              }
+            }
+          }
+        },
+        "/user/change" : {
+          "put" : {
+            "tags" : [ "user" ],
+            "summary" : "User Change Password",
+            "description" : "",
+            "operationId" : "changepassword",
+            "consumes" : [ "application/x-www-form-urlencoded" ],
+            "produces" : [ "application/json" ],
+            "parameters" : [ 
+              {
+                "name" : "authorization",
+                "in" : "header",
+                "description" : "",
+                "required" : true,
+                "type" : "string",
+                "default" : ""
+              },
+              {
+                "name" : "oldpassword",
+                "in" : "formData",
+                "description" : "Enter Old Password",
+                "required" : true,
+                "type" : "string"
+              },
+              {
+                "name" : "newpassword",
+                "in" : "formData",
+                "description" : "Enter New Password",
+                "required" : true,
+                "type" : "string"
+              }],
+            "responses" : {
+              "405" : {
+                "description" : "Invalid input"
+              }
+            }
+          }
+        },
+        "/category/list" : {
+          "get" : {
+            "tags" : [ "category" ],
+            "summary" : "List Categories",
+            "description" : "",
+            "operationId" : "categorylist",
+            "consumes" : [ "application/x-www-form-urlencoded" ],
+            "produces" : [ "application/json" ],
+            "parameters" : [           {
+              "name" : "page",
+              "in" : "query",
+              "description" : "Enter Page Number",
+              "required" : false,
+              "type" : "string"
+            }],
+            "responses" : {
+              "405" : {
+                "description" : "Invalid input"
+              }
+            }
+          }
+        },
+        "/category/detail" : {
+          "get" : {
+            "tags" : [ "category" ],
+            "summary" : "Category detail",
+            "description" : "",
+            "operationId" : "categorydetail",
+            "consumes" : [ "application/x-www-form-urlencoded" ],
+            "produces" : [ "application/json" ],
+            "parameters" : [{
+              "name" : "category_id",
+              "in" : "query",
+              "description" : "Enter Category Id",
+              "required" : false,
+              "type" : "string"
+            }],
+            "responses" : {
+              "405" : {
+                "description" : "Invalid input"
+              }
+            }
+          }
+        },
+        "/category/add" : {
+          "post" : {
+            "tags" : [ "admin" ],
+            "summary" : "Add new category",
+            "description" : "",
+            "operationId" : "addcategory",
+            "consumes" : [ "application/x-www-form-urlencoded" ],
+            "produces" : [ "application/json" ],
+            "parameters" : [{
+                "name" : "authorization",
+                "in" : "header",
+                "description" : "",
+                "required" : false,
+                "type" : "string",
+                "default" : ""
+              },{
+                "name" : "title",
+                "in" : "formData",
+                "description" : "Enter Title",
+                "required" : true,
+                "type" : "string"
+              },
+              {
+                "name" : "category_image",
+                "in" : "formData",
+                "description" : "Enter Category Image",
+                "required" : true,
+                "type" : "string"
+              },
+              {
+                "name" : "status",
+                "in" : "formData",
+                "description" : "Enter Status",
+                "required" : true,
+                "type" : "string"
+              }],
+            "responses" : {
+              "405" : {
+                "description" : "Invalid input"
+              }
+            }
+          }
+        },
+        "/category/edit" : {
+          "put" : {
+            "tags" : [ "admin" ],
+            "summary" : "Edit category",
+            "description" : "",
+            "operationId" : "editcategory",
+            "consumes" : [ "application/x-www-form-urlencoded" ],
+            "produces" : [ "application/json" ],
+            "parameters" : [{
+                "name" : "authorization",
+                "in" : "header",
+                "description" : "",
+                "required" : false,
+                "type" : "string",
+                "default" : ""
+              },{
+                "name" : "category_id",
+                "in" : "formData",
+                "description" : "Enter Category Id",
+                "required" : true,
+                "type" : "string"
+              },{
+                "name" : "title",
+                "in" : "formData",
+                "description" : "Enter Title",
+                "required" : false,
+                "type" : "string"
+              },
+              {
+                "name" : "category_image",
+                "in" : "formData",
+                "description" : "Enter Category Image",
+                "required" : false,
+                "type" : "string"
+              },
+              {
+                "name" : "status",
+                "in" : "formData",
+                "description" : "Enter Status",
+                "required" : false,
+                "type" : "string"
+              }],
+            "responses" : {
+              "405" : {
+                "description" : "Invalid input"
+              }
+            }
+          }
+        },
+        "/category/delete" : {
+          "delete" : {
+            "tags" : [ "admin" ],
+            "summary" : "Delete category",
+            "description" : "",
+            "operationId" : "deletecategory",
+            "consumes" : [ "application/x-www-form-urlencoded" ],
+            "produces" : [ "application/json" ],
+            "parameters" : [{
+                "name" : "authorization",
+                "in" : "header",
+                "description" : "",
+                "required" : false,
+                "type" : "string",
+                "default" : ""
+              },{
+                "name" : "category_id",
+                "in" : "formData",
+                "description" : "Enter Category Id",
+                "required" : true,
+                "type" : "string"
+              }],
+            "responses" : {
+              "405" : {
+                "description" : "Invalid input"
+              }
+            }
+          }
+        },
+        "/collection/add" : {
+          "post" : {
+            "tags" : [ "collection" ],
+            "summary" : "Add new collection",
+            "description" : "",
+            "operationId" : "addcollection",
+            "consumes" : [ "application/x-www-form-urlencoded" ],
+            "produces" : [ "application/json" ],
+            "parameters" : [{
+                "name" : "authorization",
+                "in" : "header",
+                "description" : "",
+                "required" : true,
+                "type" : "string",
+                "default" : ""
+              },{
+                "name" : "name",
+                "in" : "formData",
+                "description" : "Enter name",
+                "required" : true,
+                "type" : "string"
+              },
+              {
+                "name" : "description",
+                "in" : "formData",
+                "description" : "Enter description",
+                "required" : false,
+                "type" : "string"
+              },
+              {
+                "name" : "banner",
+                "in" : "formData",
+                "description" : "Enter banner name",
+                "required" : false,
+                "type" : "string"
+              },
+              {
+                "name" : "image",
+                "in" : "formData",
+                "description" : "Enter image name",
+                "required" : false,
+                "type" : "string"
+              }],
+            "responses" : {
+              "405" : {
+                "description" : "Invalid input"
+              }
+            }
+          }
+        },
+        "/collection/detail" : {
+          "get" : {
+            "tags" : [ "collection" ],
+            "summary" : "Collection detail",
+            "description" : "",
+            "operationId" : "collectiondetail",
+            "consumes" : [ "application/x-www-form-urlencoded" ],
+            "produces" : [ "application/json" ],
+            "parameters" : [{
+              "name" : "collection_id",
+              "in" : "query",
+              "description" : "Enter collection id",
+              "required" : false,
+              "type" : "string"
+            }],
+            "responses" : {
+              "405" : {
+                "description" : "Invalid input"
+              }
+            }
+          }
+        },
+        "/collection/update" : {
+          "put" : {
+            "tags" : [ "collection" ],
+            "summary" : "update collection",
+            "description" : "",
+            "operationId" : "updatecollection",
+            "consumes" : [ "application/x-www-form-urlencoded" ],
+            "produces" : [ "application/json" ],
+            "parameters" : [{
+                "name" : "authorization",
+                "in" : "header",
+                "description" : "",
+                "required" : true,
+                "type" : "string",
+                "default" : ""
+              },{
+                "name" : "collection_id",
+                "in" : "formData",
+                "description" : "Enter collection id",
+                "required" : false,
+                "type" : "string"
+              },{
+                "name" : "name",
+                "in" : "formData",
+                "description" : "Enter Name",
+                "required" : false,
+                "type" : "string"
+              },
+              {
+                "name" : "description",
+                "in" : "formData",
+                "description" : "Enter description",
+                "required" : false,
+                "type" : "string"
+              },
+              {
+                "name" : "banner",
+                "in" : "formData",
+                "description" : "Enter banner name",
+                "required" : false,
+                "type" : "string"
+              },
+              {
+                "name" : "image",
+                "in" : "formData",
+                "description" : "Enter image name",
+                "required" : false,
+                "type" : "string"
+              },
+              {
+                "name" : "status",
+                "in" : "formData",
+                "description" : "Enter status",
+                "required" : false,
+                "type" : "string"
+              }],
+            "responses" : {
+              "405" : {
+                "description" : "Invalid input"
+              }
+            }
+          }
+        },
+        "/collection/delete" : {
+          "delete" : {
+            "tags" : [ "collection" ],
+            "summary" : "Delete collection",
+            "description" : "",
+            "operationId" : "deletecollection",
+            "consumes" : [ "application/x-www-form-urlencoded" ],
+            "produces" : [ "application/json" ],
+            "parameters" : [{
+                "name" : "authorization",
+                "in" : "header",
+                "description" : "",
+                "required" : true,
+                "type" : "string",
+                "default" : ""
+              },{
+                "name" : "collection_id",
+                "in" : "formData",
+                "description" : "Enter collection id",
+                "required" : true,
+                "type" : "string"
+              }],
+            "responses" : {
+              "405" : {
+                "description" : "Invalid input"
+              }
+            }
+          }
+        },
+        "/collection/list" : {
+          "get" : {
+            "tags" : [ "collection" ],
+            "summary" : "List Collection",
+            "description" : "",
+            "operationId" : "collectionlist",
+            "consumes" : [ "application/x-www-form-urlencoded" ],
+            "produces" : [ "application/json" ],
+            "parameters" : [{
+              "name" : "authorization",
+              "in" : "header",
+              "description" : "",
+              "required" : false,
+              "type" : "string",
+              "default" : ""
+            },{
+              "name" : "page",
+              "in" : "query",
+              "description" : "Enter Page Number",
+              "required" : false,
+              "type" : "string"
+            },
+            {
+              "name" : "keyword",
+              "in" : "query",
+              "description" : "Enter keyword",
+              "required" : false,
+              "type" : "string"
+            }],
+            "responses" : {
+              "405" : {
+                "description" : "Invalid input"
+              }
+            }
+          }
+        },
+        "/collection/fulllist" : {
+          "get" : {
+            "tags" : [ "admin" ],
+            "summary" : "List Collection",
+            "description" : "",
+            "operationId" : "collectionfulllist",
+            "consumes" : [ "application/x-www-form-urlencoded" ],
+            "produces" : [ "application/json" ],
+            "parameters" : [{
+              "name" : "authorization",
+              "in" : "header",
+              "description" : "",
+              "required" : true,
+              "type" : "string",
+              "default" : ""
+            },{
+              "name" : "page",
+              "in" : "query",
+              "description" : "Enter Page Number",
+              "required" : false,
+              "type" : "string"
+            },
+            {
+              "name" : "keyword",
+              "in" : "query",
+              "description" : "Enter keyword",
+              "required" : false,
+              "type" : "string"
+            }],
+            "responses" : {
+              "405" : {
+                "description" : "Invalid input"
+              }
+            }
+          }
+        },
+        "/item/add" : {
+          "post" : {
+            "tags" : [ "item" ],
+            "summary" : "Add new item",
+            "description" : "",
+            "operationId" : "additem",
+            "consumes" : [ "application/x-www-form-urlencoded" ],
+            "produces" : [ "application/json" ],
+            "parameters" : [{
+                "name" : "authorization",
+                "in" : "header",
+                "description" : "",
+                "required" : false,
+                "type" : "string",
+                "default" : ""
+              },{
+                "name" : "name",
+                "in" : "formData",
+                "description" : "Enter name",
+                "required" : true,
+                "type" : "string"
+              },
+              {
+                "name" : "description",
+                "in" : "formData",
+                "description" : "Enter Description",
+                "required" : true,
+                "type" : "string"
+              },
+              {
+                "name" : "external_link",
+                "in" : "formData",
+                "description" : "Enter eternal link",
+                "required" : false,
+                "type" : "string"
+              },
+              {
+                "name" : "media",
+                "in" : "formData",
+                "description" : "Enter media",
+                "required" : false,
+                "type" : "string"
+              },
+              {
+                "name" : "thumb",
+                "in" : "formData",
+                "description" : "Enter thumb",
+                "required" : false,
+                "type" : "string"
+              },
+              {
+                "name" : "stats",
+                "in" : "formData",
+                "description" : "Enter stats",
+                "required" : false,
+                "type" : "string"
+              },
+              {
+                "name" : "attributes",
+                "in" : "formData",
+                "description" : "Enter attributes",
+                "required" : false,
+                "type" : "string"
+              },
+              {
+                "name" : "levels",
+                "in" : "formData",
+                "description" : "Enter levels",
+                "required" : false,
+                "type" : "string"
+              },
+              {
+                "name" : "unlock_content_url",
+                "in" : "formData",
+                "description" : "Enter secured content url",
+                "required" : false,
+                "type" : "string"
+              },
+              {
+                "name" : "category_id",
+                "in" : "formData",
+                "description" : "Enter catgory id",
+                "required" : true,
+                "type" : "string"
+              },
+              {
+                "name" : "collection_id",
+                "in" : "formData",
+                "description" : "Enter collection id",
+                "required" : true,
+                "type" : "string"
+              },
+              {
+                "name" : "price",
+                "in" : "formData",
+                "description" : "Enter price",
+                "required" : true,
+                "type" : "string"
+              }],
+            "responses" : {
+              "405" : {
+                "description" : "Invalid input"
+              }
+            }
+          }
+        },
+        "/item/update" : {
+          "put" : {
+            "tags" : [ "item" ],
+            "summary" : "Udate item",
+            "description" : "",
+            "operationId" : "updateitem",
+            "consumes" : [ "application/x-www-form-urlencoded" ],
+            "produces" : [ "application/json" ],
+            "parameters" : [{
+                "name" : "authorization",
+                "in" : "header",
+                "description" : "",
+                "required" : false,
+                "type" : "string",
+                "default" : ""
+              },{
+                "name" : "item_id",
+                "in" : "formData",
+                "description" : "Enter item id",
+                "required" : true,
+                "type" : "string"
+              },{
+                "name" : "name",
+                "in" : "formData",
+                "description" : "Enter name",
+                "required" : false,
+                "type" : "string"
+              },
+              {
+                "name" : "description",
+                "in" : "formData",
+                "description" : "Enter Description",
+                "required" : false,
+                "type" : "string"
+              },
+              {
+                "name" : "external_link",
+                "in" : "formData",
+                "description" : "Enter eternal link",
+                "required" : false,
+                "type" : "string"
+              },
+              {
+                "name" : "media",
+                "in" : "formData",
+                "description" : "Enter media",
+                "required" : false,
+                "type" : "string"
+              },
+              {
+                "name" : "thumb",
+                "in" : "formData",
+                "description" : "Enter thumb",
+                "required" : false,
+                "type" : "string"
+              },
+              {
+                "name" : "stats",
+                "in" : "formData",
+                "description" : "Enter stats",
+                "required" : false,
+                "type" : "string"
+              },
+              {
+                "name" : "attributes",
+                "in" : "formData",
+                "description" : "Enter attributes",
+                "required" : false,
+                "type" : "string"
+              },
+              {
+                "name" : "levels",
+                "in" : "formData",
+                "description" : "Enter levels",
+                "required" : false,
+                "type" : "string"
+              },
+              {
+                "name" : "unlock_content_url",
+                "in" : "formData",
+                "description" : "Enter secured content url",
+                "required" : false,
+                "type" : "string"
+              },
+              {
+                "name" : "category_id",
+                "in" : "formData",
+                "description" : "Enter catgory id",
+                "required" : false,
+                "type" : "string"
+              },
+              {
+                "name" : "collection_id",
+                "in" : "formData",
+                "description" : "Enter collection id",
+                "required" : false,
+                "type" : "string"
+              },
+              {
+                "name" : "price",
+                "in" : "formData",
+                "description" : "Enter price",
+                "required" : false,
+                "type" : "string"
+              }],
+            "responses" : {
+              "405" : {
+                "description" : "Invalid input"
+              }
+            }
+          }
+        },
+        "/item/publish" : {
+          "post" : {
+            "tags" : [ "item" ],
+            "summary" : "publish item",
+            "description" : "",
+            "operationId" : "publishitem",
+            "consumes" : [ "application/x-www-form-urlencoded" ],
+            "produces" : [ "application/json" ],
+            "parameters" : [{
+                "name" : "authorization",
+                "in" : "header",
+                "description" : "",
+                "required" : false,
+                "type" : "string",
+                "default" : ""
+              },{
+                "name" : "item_id",
+                "in" : "formData",
+                "description" : "Enter item_id",
+                "required" : true,
+                "type" : "string"
+              }],
+            "responses" : {
+              "405" : {
+                "description" : "Invalid input"
+              }
+            }
+          }
+        },
+        "/item/purchase" : {
+          "post" : {
+            "tags" : [ "item" ],
+            "summary" : "purchase item",
+            "description" : "",
+            "operationId" : "publishitem",
+            "consumes" : [ "application/x-www-form-urlencoded" ],
+            "produces" : [ "application/json" ],
+            "parameters" : [{
+                "name" : "authorization",
+                "in" : "header",
+                "description" : "",
+                "required" : false,
+                "type" : "string",
+                "default" : ""
+              },{
+                "name" : "item_id",
+                "in" : "formData",
+                "description" : "Enter item_id",
+                "required" : true,
+                "type" : "string"
+              }],
+            "responses" : {
+              "405" : {
+                "description" : "Invalid input"
+              }
+            }
+          }
+        },
+        "/item/delete" : {
+          "delete" : {
+            "tags" : [ "item" ],
+            "summary" : "Delete item",
+            "description" : "",
+            "operationId" : "deleteitem",
+            "consumes" : [ "application/x-www-form-urlencoded" ],
+            "produces" : [ "application/json" ],
+            "parameters" : [{
+                "name" : "authorization",
+                "in" : "header",
+                "description" : "",
+                "required" : true,
+                "type" : "string",
+                "default" : ""
+              },{
+                "name" : "item_id",
+                "in" : "formData",
+                "description" : "Enter item id",
+                "required" : true,
+                "type" : "string"
+              }],
+            "responses" : {
+              "405" : {
+                "description" : "Invalid input"
+              }
+            }
+          }
+        },
+        "/item/list" : {
+          "get" : {
+            "tags" : [ "item" ],
+            "summary" : "List Item",
+            "description" : "",
+            "operationId" : "itemlist",
+            "consumes" : [ "application/x-www-form-urlencoded" ],
+            "produces" : [ "application/json" ],
+            "parameters" : [{
+              "name" : "authorization",
+              "in" : "header",
+              "description" : "",
+              "required" : false,
+              "type" : "string",
+              "default" : ""
+            },{
+              "name" : "type",
+              "in" : "query",
+              "description" : "Enter Type (my, latest, view, price, offer, collection, category, mycollection)",
+              "required" : true,
+              "type" : "string"
+            },{
+              "name" : "page",
+              "in" : "query",
+              "description" : "Enter Page Number",
+              "required" : false,
+              "type" : "string"
+            },{
+              "name" : "user_id",
+              "in" : "query",
+              "description" : "Enter User ID if type is my",
+              "required" : false,
+              "type" : "string"
+            },{
+              "name" : "item_id",
+              "in" : "query",
+              "description" : "Enter Item ID if type is view",
+              "required" : false,
+              "type" : "string"
+            },{
+              "name" : "price_range",
+              "in" : "query",
+              "description" : "Enter Price Range if type is price",
+              "required" : false,
+              "type" : "string"
+            },{
+              "name" : "collection_id",
+              "in" : "query",
+              "description" : "Enter Collection Id if type is collection and mycollection",
+              "required" : false,
+              "type" : "string"
+            },{
+              "name" : "category_id",
+              "in" : "query",
+              "description" : "Enter Category Id if type is category",
+              "required" : false,
+              "type" : "string"
+            },
+            {
+              "name" : "keyword",
+              "in" : "query",
+              "description" : "Enter keyword",
+              "required" : false,
+              "type" : "string"
+            }],
+            "responses" : {
+              "405" : {
+                "description" : "Invalid input"
+              }
+            }
+          }
+        },
+        "/item/addviews" : {
+          "post" : {
+            "tags" : [ "item" ],
+            "summary" : "Add Views",
+            "description" : "",
+            "operationId" : "addviews",
+            "consumes" : [ "application/x-www-form-urlencoded" ],
+            "produces" : [ "application/json" ],
+            "parameters" : [{
+              "name" : "authorization",
+              "in" : "header",
+              "description" : "",
+              "required" : false,
+              "type" : "string",
+              "default" : ""
+            },{
+              "name" : "item_id",
+              "in" : "formData",
+              "description" : "Enter item id",
+              "required" : true,
+              "type" : "string"
+            }],
+            "responses" : {
+              "405" : {
+                "description" : "Invalid input"
+              }
+            }
+          }
+        },
+        "/item/viewslist" : {
+          "get" : {
+            "tags" : [ "item" ],
+            "summary" : "List Views",
+            "description" : "",
+            "operationId" : "viewlist",
+            "consumes" : [ "application/x-www-form-urlencoded" ],
+            "produces" : [ "application/json" ],
+            "parameters" : [{
+              "name" : "page",
+              "in" : "query",
+              "description" : "Enter Page Number",
+              "required" : false,
+              "type" : "string"
+            },{
+              "name" : "item_id",
+              "in" : "query",
+              "description" : "Enter item id",
+              "required" : false,
+              "type" : "string"
+            },{
+              "name" : "user_id",
+              "in" : "query",
+              "description" : "Enter user id",
+              "required" : false,
+              "type" : "string"
+            }],
+            "responses" : {
+              "405" : {
+                "description" : "Invalid input"
+              }
+            }
+          }
+        },
+        "/item/addfavourites" : {
+          "post" : {
+            "tags" : [ "item" ],
+            "summary" : "Add Favourites",
+            "description" : "",
+            "operationId" : "addfavourites",
+            "consumes" : [ "application/x-www-form-urlencoded" ],
+            "produces" : [ "application/json" ],
+            "parameters" : [{
+              "name" : "authorization",
+              "in" : "header",
+              "description" : "",
+              "required" : false,
+              "type" : "string",
+              "default" : ""
+            },{
+              "name" : "item_id",
+              "in" : "formData",
+              "description" : "Enter item id",
+              "required" : true,
+              "type" : "string"
+            },{
+              "name" : "type",
+              "in" : "formData",
+              "description" : "Enter type(increase, decrease)",
+              "required" : true,
+              "type" : "string"
+            }],
+            "responses" : {
+              "405" : {
+                "description" : "Invalid input"
+              }
+            }
+          }
+        },
+        "/item/favouriteslist" : {
+          "get" : {
+            "tags" : [ "item" ],
+            "summary" : "Favourite List",
+            "description" : "",
+            "operationId" : "favouritelist",
+            "consumes" : [ "application/x-www-form-urlencoded" ],
+            "produces" : [ "application/json" ],
+            "parameters" : [           {
+              "name" : "page",
+              "in" : "query",
+              "description" : "Enter Page Number",
+              "required" : false,
+              "type" : "string"
+            },{
+              "name" : "item_id",
+              "in" : "query",
+              "description" : "Enter item id",
+              "required" : false,
+              "type" : "string"
+            },{
+              "name" : "user_id",
+              "in" : "query",
+              "description" : "Enter user id",
+              "required" : false,
+              "type" : "string"
+            }],
+            "responses" : {
+              "405" : {
+                "description" : "Invalid input"
+              }
+            }
+          }
+        },
+        "/item/history" : {
+          "get" : {
+            "tags" : [ "item" ],
+            "summary" : "History List",
+            "description" : "",
+            "operationId" : "historylist",
+            "consumes" : [ "application/x-www-form-urlencoded" ],
+            "produces" : [ "application/json" ],
+            "parameters" : [           {
+              "name" : "page",
+              "in" : "query",
+              "description" : "Enter Page Number",
+              "required" : false,
+              "type" : "string"
+            }],
+            "responses" : {
+              "405" : {
+                "description" : "Invalid input"
+              }
+            }
+          }
+        },
+        "/item/offers" : {
+          "get" : {
+            "tags" : [ "item" ],
+            "summary" : "Offer List",
+            "description" : "",
+            "operationId" : "offerlist",
+            "consumes" : [ "application/x-www-form-urlencoded" ],
+            "produces" : [ "application/json" ],
+            "parameters" : [{
+              "name" : "page",
+              "in" : "query",
+              "description" : "Enter Page Number",
+              "required" : false,
+              "type" : "string"
+            },{
+              "name" : "type",
+              "in" : "query",
+              "description" : "Enter Type (profile, item)",
+              "required" : false,
+              "type" : "string"
+            },{
+              "name" : "user_id",
+              "in" : "query",
+              "description" : "Enter User ID",
+              "required" : false,
+              "type" : "string"
+            },{
+              "name" : "item_id",
+              "in" : "query",
+              "description" : "Enter Item ID",
+              "required" : false,
+              "type" : "string"
+            }],
+            "responses" : {
+              "405" : {
+                "description" : "Invalid input"
+              }
+            }
+          }
+        },          
+        "/item/addoffer" : {
+          "post" : {
+            "tags" : [ "item" ],
+            "summary" : "Add Offer",
+            "description" : "",
+            "operationId" : "addoffer",
+            "consumes" : [ "application/x-www-form-urlencoded" ],
+            "produces" : [ "application/json" ],
+            "parameters" : [{
+              "name" : "authorization",
+              "in" : "header",
+              "description" : "",
+              "required" : false,
+              "type" : "string",
+              "default" : ""
+            },{
+              "name" : "item_id",
+              "in" : "formData",
+              "description" : "Enter item id",
+              "required" : true,
+              "type" : "string"
+            },{
+              "name" : "price",
+              "in" : "formData",
+              "description" : "Enter price",
+              "required" : true,
+              "type" : "string"
+            }],
+            "responses" : {
+              "405" : {
+                "description" : "Invalid input"
+              }
+            }
+          }
+        },          
+        "/item/actionoffer" : {
+          "post" : {
+            "tags" : [ "item" ],
+            "summary" : "Add Favourites",
+            "description" : "",
+            "operationId" : "addfavourites",
+            "consumes" : [ "application/x-www-form-urlencoded" ],
+            "produces" : [ "application/json" ],
+            "parameters" : [{
+              "name" : "authorization",
+              "in" : "header",
+              "description" : "",
+              "required" : false,
+              "type" : "string",
+              "default" : ""
+            },{
+              "name" : "item_id",
+              "in" : "formData",
+              "description" : "Enter item id",
+              "required" : true,
+              "type" : "string"
+            },{
+              "name" : "offer_id",
+              "in" : "formData",
+              "description" : "Enter offer id",
+              "required" : true,
+              "type" : "string"
+            },{
+              "name" : "type",
+              "in" : "formData",
+              "description" : "Enter Type (accept, cancel)",
+              "required" : true,
+              "type" : "string"
+            }],
+            "responses" : {
+              "405" : {
+                "description" : "Invalid input"
+              }
+            }
+          }
+        },
+        "/item/sendeth" : {
+          "post" : {
+            "tags" : [ "item" ],
+            "summary" : "Send ETH",
+            "description" : "",
+            "operationId" : "sendeth",
+            "consumes" : [ "application/x-www-form-urlencoded" ],
+            "produces" : [ "application/json" ],
+            "parameters" : [{
+              "name" : "authorization",
+              "in" : "header",
+              "description" : "",
+              "required" : false,
+              "type" : "string",
+              "default" : ""
+            },{
+              "name" : "eth_address",
+              "in" : "formData",
+              "description" : "Enter eth address",
+              "required" : true,
+              "type" : "string"
+            },{
+              "name" : "amount",
+              "in" : "formData",
+              "description" : "Enter amount",
+              "required" : true,
+              "type" : "string"
+            }],
+            "responses" : {
+              "405" : {
+                "description" : "Invalid input"
+              }
+            }
+          }
+        },
+        "/item/checkbalance" : {
+          "get" : {
+            "tags" : [ "item" ],
+            "summary" : "Check Eth Balance",
+            "description" : "",
+            "operationId" : "checkbalance",
+            "consumes" : [ "application/x-www-form-urlencoded" ],
+            "produces" : [ "application/json" ],
+            "parameters" : [{
+              "name" : "authorization",
+              "in" : "header",
+              "description" : "",
+              "required" : true,
+              "type" : "string",
+              "default" : ""
+            }],
+            "responses" : {
+              "405" : {
+                "description" : "Invalid input"
+              }
+            }
+          }
+        },
+        "/settings/setoptions" : {
+          "post" : {
+            "tags" : [ "admin" ],
+            "summary" : "Set Options",
+            "description" : "",
+            "operationId" : "setoptions",
+            "consumes" : [ "application/x-www-form-urlencoded" ],
+            "produces" : [ "application/json" ],
+            "parameters" : [{
+              "name" : "authorization",
+              "in" : "header",
+              "description" : "",
+              "required" : true,
+              "type" : "string",
+              "default" : ""
+            },{
+              "name" : "name",
+              "in" : "formData",
+              "description" : "Enter Name",
+              "required" : true,
+              "type" : "string"
+            },{
+              "name" : "value",
+              "in" : "formData",
+              "description" : "Enter Value",
+              "required" : true,
+              "type" : "string"
+            }],
+            "responses" : {
+              "405" : {
+                "description" : "Invalid input"
+              }
+            }
+          }
+        }
+        
+      }
+    }
