@@ -663,6 +663,7 @@ loginUser = function(params,req,res) {
             const opt_code = random(100000, 999999);
             const activation_code = crypto.createHash('md5').update(opt_code.toString()).digest('hex');
 
+            console.log(user.email);
             mailer.mail({
                 Name : user.first_name + ' ' + user.last_name,
                 content:"For verify your email address, enter this verification code when prompted: "+ opt_code
@@ -684,7 +685,8 @@ loginUser = function(params,req,res) {
                             errors:err
                         });
                         return
-                    }               
+                    } 
+       
                     res.json({
                         status: true,
                         activation_code:activation_code,

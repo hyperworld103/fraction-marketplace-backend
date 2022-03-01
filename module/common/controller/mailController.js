@@ -66,6 +66,7 @@ exports.mail =  function (data,receiptant,subject,sender, callback) {
     return;
   }
   var filePath = __basedir;
+  console.log(filePath);
   readFile(filePath + '/templates/mail/index.html', function(err, html) {
         var template = handlebars.compile(html);
         data.sitename = config.site_name;
