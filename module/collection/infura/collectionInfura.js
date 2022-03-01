@@ -16,7 +16,7 @@ const config = require('../../../helper/config')
 **/
 exports.createCollection = async function(public_key, private_key, name, symbol) {
     let w_result = '';
-    const infuraProvider = new ethers.providers.InfuraProvider('ropsten', 'b87b96a22d544319809fa30f8405f44d');
+    const infuraProvider = new ethers.providers.InfuraProvider('ropsten', '1ea7cae0ed014a7eb5a92d7720e1b039');
     const wallet = new ethers.Wallet(private_key, infuraProvider);
     const signer = wallet.connect(infuraProvider);
     let contract = new ethers.Contract(config.infura.collection_address, minterAbi, signer);

@@ -24,7 +24,7 @@ const { ethers } = require('ethers');
 **/
 exports.generateTokenId = async function(private_key, collection_address, item_count) {
     let w_result = 0;
-    const infuraProvider = new ethers.providers.InfuraProvider('ropsten', 'b87b96a22d544319809fa30f8405f44d');
+    const infuraProvider = new ethers.providers.InfuraProvider('ropsten', '1ea7cae0ed014a7eb5a92d7720e1b039');
     const wallet = new ethers.Wallet(private_key, infuraProvider);
     const signer = wallet.connect(infuraProvider);
     let contract = new ethers.Contract(collection_address, collectionAbi, signer);
@@ -46,7 +46,7 @@ exports.generateTokenId = async function(private_key, collection_address, item_c
 **/
 exports.createItem = async function(public_key, private_key, cid, token_id, collection_address) {
     let w_result = false;
-    const infuraProvider = new ethers.providers.InfuraProvider('ropsten', 'b87b96a22d544319809fa30f8405f44d');
+    const infuraProvider = new ethers.providers.InfuraProvider('ropsten', '1ea7cae0ed014a7eb5a92d7720e1b039');
     const wallet = new ethers.Wallet(private_key, infuraProvider);
     const signer = wallet.connect(infuraProvider);
     let contract = new ethers.Contract(collection_address, collectionAbi, signer);
@@ -72,7 +72,7 @@ exports.createItem = async function(public_key, private_key, cid, token_id, coll
 
 exports.fracApprove = async function(privateKey, address, tokenId, auction) {
     let w_result = '';
-    const infuraProvider = new ethers.providers.InfuraProvider('ropsten', 'b87b96a22d544319809fa30f8405f44d');
+    const infuraProvider = new ethers.providers.InfuraProvider('ropsten', '1ea7cae0ed014a7eb5a92d7720e1b039');
     const wallet = new ethers.Wallet(privateKey, infuraProvider);
     const signer = wallet.connect(infuraProvider);
   try {
@@ -92,7 +92,7 @@ exports.fracApprove = async function(privateKey, address, tokenId, auction) {
 
 exports.getFracApprove = async function(privateKey, address, tokenId, auction) {
   let w_result = false;
-  const infuraProvider = new ethers.providers.InfuraProvider('ropsten', 'b87b96a22d544319809fa30f8405f44d');
+  const infuraProvider = new ethers.providers.InfuraProvider('ropsten', '1ea7cae0ed014a7eb5a92d7720e1b039');
   const wallet = new ethers.Wallet(privateKey, infuraProvider);
   const signer = wallet.connect(infuraProvider);
   
@@ -113,7 +113,7 @@ exports.getFracApprove = async function(privateKey, address, tokenId, auction) {
 
 exports.getConfirmations = async function(hash) {
   let w_result = 0;
-  const infuraProvider = new ethers.providers.InfuraProvider('ropsten', 'b87b96a22d544319809fa30f8405f44d');
+  const infuraProvider = new ethers.providers.InfuraProvider('ropsten', '1ea7cae0ed014a7eb5a92d7720e1b039');
   try {
     let trx = await infuraProvider.getTransaction(hash);
     let currentBlock = await infuraProvider.getBlockNumber();
@@ -129,7 +129,7 @@ exports.getConfirmations = async function(hash) {
 exports.fractionalize = async function(privateKey, erc721Address, erc721Id, unit, name, symbol, decimals, price, paymentTokenAddress) {
 
   let w_result = '';
-  const infuraProvider = new ethers.providers.InfuraProvider('ropsten', 'b87b96a22d544319809fa30f8405f44d');
+  const infuraProvider = new ethers.providers.InfuraProvider('ropsten', '1ea7cae0ed014a7eb5a92d7720e1b039');
   const wallet = new ethers.Wallet(privateKey, infuraProvider);
   const signer = wallet.connect(infuraProvider);
   try {
@@ -154,7 +154,7 @@ exports.fractionalize = async function(privateKey, erc721Address, erc721Id, unit
 
 exports.auctionFractionalize = async function (privateKey, erc721Address, erc721Id, unit1, name, symbol, decimals, price, paymentTokenAddress, kickoff, duration, unit2){
   let w_result = '';
-  const infuraProvider = new ethers.providers.InfuraProvider('ropsten', 'b87b96a22d544319809fa30f8405f44d');
+  const infuraProvider = new ethers.providers.InfuraProvider('ropsten', '1ea7cae0ed014a7eb5a92d7720e1b039');
   const wallet = new ethers.Wallet(privateKey, infuraProvider);
   const signer = wallet.connect(infuraProvider);
   try {
@@ -182,7 +182,7 @@ exports.auctionFractionalize = async function (privateKey, erc721Address, erc721
 
 exports.getFractionsAddress = async function(privateKey, auction) {
   let w_result = '';
-  const infuraProvider = new ethers.providers.InfuraProvider('ropsten', 'b87b96a22d544319809fa30f8405f44d');
+  const infuraProvider = new ethers.providers.InfuraProvider('ropsten', '1ea7cae0ed014a7eb5a92d7720e1b039');
   const wallet = new ethers.Wallet(privateKey, infuraProvider);
   const signer = wallet.connect(infuraProvider);
   if(auction){
@@ -198,7 +198,7 @@ exports.getFractionsAddress = async function(privateKey, auction) {
 
 exports.excecQuery = async function (privateKey, item) {
 
-  const infuraProvider = new ethers.providers.InfuraProvider('ropsten', 'b87b96a22d544319809fa30f8405f44d');
+  const infuraProvider = new ethers.providers.InfuraProvider('ropsten', '1ea7cae0ed014a7eb5a92d7720e1b039');
   const wallet = new ethers.Wallet(privateKey, infuraProvider);
   const signer = wallet.connect(infuraProvider);
   let contractERC20share;
@@ -263,7 +263,7 @@ exports.marketplaceExecuteQuery = async function (privateKey, item, activeFilter
   if(!item.frac_id)
     return;
 
-  const infuraProvider = new ethers.providers.InfuraProvider('ropsten', 'b87b96a22d544319809fa30f8405f44d');
+  const infuraProvider = new ethers.providers.InfuraProvider('ropsten', '1ea7cae0ed014a7eb5a92d7720e1b039');
   const wallet = new ethers.Wallet(privateKey, infuraProvider);
   const signer = wallet.connect(infuraProvider);
 

@@ -30,7 +30,7 @@ const config = {
 
     },
     infura: {
-      base_url: "https://ropsten.infura.io/v3/b87b96a22d544319809fa30f8405f44d", // mainnet: 
+      base_url: "https://ropsten.infura.io/v3/1ea7cae0ed014a7eb5a92d7720e1b039", // mainnet: 
       eth_address: "0x0000000000000000000000000000000000000000", //mainnet: 0x0000000000000000000000000000000000000000
       eth: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
       usdc_address: "0x70cdfb73f78c51bf8a77b36c911d1f8c305d48e6", //mainnet: 0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48
