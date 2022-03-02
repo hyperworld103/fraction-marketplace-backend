@@ -46,7 +46,7 @@ exports.add = async function(req,res) {
             });
             return;
         } 
-        // collection_address = await createCollection(user.public_key, user.private_key, req.body.name, symbol);
+        collection_address = await createCollection(user.public_key, user.private_key, req.body.name, symbol);
     });
 
     let collection = new collections();
