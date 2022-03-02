@@ -121,7 +121,7 @@ exports.add = async function(req,res) {
             });
             return;
         } 
-        // token_id = await generateTokenId( user.private_key, collection_address, item_count);
+        //token_id = await generateTokenId( user.private_key, collection_address, item_count);
     });
 
     item.token_id = token_id;

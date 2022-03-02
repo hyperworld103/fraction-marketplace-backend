@@ -16,7 +16,9 @@ const { validationResult } = require('express-validator');
 */
 exports.getList = async function(req,res) {
     var page = req.query.page ? req.query.page : '1';  
+    
     var query = categories.find();
+    console.log(query);
     var offset = ( page == '1' ) ? 0 : ((parseInt(page-1))*10);
     query = query.where('status' , 'active')    
     query = query.sort('-create_date')

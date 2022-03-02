@@ -358,7 +358,7 @@ exports.marketplaceExecuteQuery = async function (privateKey, item, activeFilter
     target: {
       id: item._id,
       tokenId: item.token_id,
-      tokenURI: 'https://ipfs.io/ipfs/' + item.cid,
+      tokenURI: 'https://io/ipfs/' + item.cid,
       collection: {
         id: item.collection_id.contract_address,
         name: item.collection_id.name
