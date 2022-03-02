@@ -29,8 +29,10 @@ exports.add = async function(req,res) {
     }  
     
     let symbol = req.body.name.replace(" ", "_")
-    let collection_address = 'test';
-    await users.findOne({_id:req.decoded.user_id}, function (err, user) {
+    let _user = {}
+
+    
+    await users.findOne({_id:req.decoded.user_id}, async function (err, user) {
         if (err) {
             res.json({
                 status: false,
@@ -46,8 +48,18 @@ exports.add = async function(req,res) {
             });
             return;
         } 
-        collection_address = await createCollection(user.public_key, user.private_key, req.body.name, symbol);
+        _user = user;
     });
+    let collection_address = 'test';
+    try {
+        collection_address = await createCollection(_user.public_key, _user.private_key, req.body.name, symbol);    
+    }catch(err) {
+        return res.json({
+            status: false,
+            message: "Transaction failed"
+        });
+    }
+    console.log(collection_address);
 
     let collection = new collections();
     collection.name = req.body.name;
@@ -87,6 +99,7 @@ exports.add = async function(req,res) {
 * This is the function which used to update collection in database
 */
 exports.update = function(req,res) {
+    console.log(req.body);
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         res.json({
@@ -111,7 +124,7 @@ exports.update = function(req,res) {
             collection.royalties = req.body.royalties ? req.body.royalties : collection.royalties;
             collection.description = req.body.description ? req.body.description : collection.description;
 
-            collections.updateMany({_id: req.body.collection_id}, {'$set': {
+            collections.updateMany({contract_address:req.body.contract_address}, {'$set': {
                 'name': collection.name,
                 'description': collection.description,
                 'royalties': collection.royalties,

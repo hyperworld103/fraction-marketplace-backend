@@ -103,8 +103,7 @@ exports.add = async function(req,res) {
         item_count = collection.item_count;
     });
 
-    let token_id = 2000000000001;
-    console.log(req.decoded.user_id)
+    let user = {};
     await users.findOne({_id:req.decoded.user_id}, function (err, user) {
         if (err) {
             res.json({
@@ -121,9 +120,21 @@ exports.add = async function(req,res) {
             });
             return;
         } 
-        //token_id = await generateTokenId( user.private_key, collection_address, item_count);
+        _user = user;
+        
     });
-
+    let token_id = '';
+    try {
+        await createItem(_user.public_key, _user.privateKey, )
+        token_id = await generateTokenId(_user.private_key, collection_address, item_count);
+    } catch(err) {
+        res.json({
+            status: false,
+            message: "Transaction failed",
+        });
+        return;
+    }
+    console.log("pass");
     item.token_id = token_id;
     item.media = req.body.media ? req.body.media : item.token_id;
 

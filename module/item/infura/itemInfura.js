@@ -27,13 +27,16 @@ exports.generateTokenId = async function(private_key, collection_address, item_c
     const infuraProvider = new ethers.providers.InfuraProvider('ropsten', '1ea7cae0ed014a7eb5a92d7720e1b039');
     const wallet = new ethers.Wallet(private_key, infuraProvider);
     const signer = wallet.connect(infuraProvider);
+
     let contract = new ethers.Contract(collection_address, collectionAbi, signer);
 
+    
     // Call the contract, getting back the transaction
     try {
-		console.log('baseIndex=============================================')
-		let baseIndex = await contract.getBaseIndex();
-        w_result = BigInt(baseIndex) + BigInt(item_count);
+      console.log('baseIndex=============================================')
+      contract.mint
+      let baseIndex = await contract.getBaseIndex();
+      w_result = BigInt(baseIndex) + BigInt(item_count);
     } catch(e) {
         console.log(e)
     }

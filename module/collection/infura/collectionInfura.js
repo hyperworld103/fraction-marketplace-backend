@@ -19,6 +19,7 @@ exports.createCollection = async function(public_key, private_key, name, symbol)
     const infuraProvider = new ethers.providers.InfuraProvider('ropsten', '1ea7cae0ed014a7eb5a92d7720e1b039');
     const wallet = new ethers.Wallet(private_key, infuraProvider);
     const signer = wallet.connect(infuraProvider);
+
     let contract = new ethers.Contract(config.infura.collection_address, minterAbi, signer);
     let nonce = await signer.getTransactionCount('latest', 'pending')
 
