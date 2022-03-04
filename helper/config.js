@@ -30,11 +30,12 @@ const config = {
 
     },
     infura: {
-      base_url: "https://ropsten.infura.io/v3/1ea7cae0ed014a7eb5a92d7720e1b039", // mainnet: 
+      base_url: "https://ropsten.infura.io/v3/a0773a757edb4cbc9d5f27c7611cfb1b", // mainnet: 
+      projectID: "a0773a757edb4cbc9d5f27c7611cfb1b",
       eth_address: "0x0000000000000000000000000000000000000000", //mainnet: 0x0000000000000000000000000000000000000000
       eth: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
       usdc_address: "0x70cdfb73f78c51bf8a77b36c911d1f8c305d48e6", //mainnet: 0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48
-      collection_address: "0x5897FAB35F637fFC7aFD11325C95D89EBA6e2c67", //mainnet: 
+      collection_address: "0xd3f85df09Ae055b958270dD86B41b53160150982", //mainnet: 
       boxes_address: "0xBAf042634d86530CFE56B38831053138Db8455C7", //mainnet: 
       fractions_address: "0x6BDCbd17F026FC15B16B0Ebc66a9b7c1D5159df7", //mainnet: 
       vault1_address: "0x45AfaBFFD6E783D576f54647338654c172241963", //mainnet: 

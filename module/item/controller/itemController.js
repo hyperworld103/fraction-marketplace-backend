@@ -103,7 +103,8 @@ exports.add = async function(req,res) {
         item_count = collection.item_count;
     });
 
-    let user = {};
+    let _user = {};
+
     await users.findOne({_id:req.decoded.user_id}, function (err, user) {
         if (err) {
             res.json({
@@ -120,12 +121,11 @@ exports.add = async function(req,res) {
             });
             return;
         } 
-        _user = user;
-        
+        _user = user;       
     });
-    let token_id = '';
+    let token_id='';
     try {
-        await createItem(_user.public_key, _user.privateKey, )
+        await createItem(_user.public_key, _user.private_key, item.cid, token_id, collection_address)
         token_id = await generateTokenId(_user.private_key, collection_address, item_count);
     } catch(err) {
         res.json({
@@ -134,8 +134,7 @@ exports.add = async function(req,res) {
         });
         return;
     }
-    console.log("pass");
-    item.token_id = token_id;
+    item.token_id = token_id.toString();
     item.media = req.body.media ? req.body.media : item.token_id;
 
     item.save(function (err) {
@@ -148,6 +147,7 @@ exports.add = async function(req,res) {
             }
             if(err.keyValue) {
                 if(err.keyValue.name){
+                    console.log(err.keyValue.name);
                     w_err = "Item Name already Exist"
                 } else if(err.keyValue.thumb) {
                     w_err = 'Image already Exist'
@@ -232,10 +232,12 @@ exports.list = function(req,res) {
         }] }
        query = query.or(search)
     }    
+
     query = query.where('current_owner', req.decoded.user_id);
     if(collection_id != '') {
         query = query.where('collection_id', collection_id).sort('-create_date');
     }
+
 
     var options = {
         select:   'name',// 'description', 'banner', 'image', 'royalties', 'item_count'],
@@ -250,6 +252,7 @@ exports.list = function(req,res) {
             message: "NFTs retrieved successfully",
             data: result
         });
+        return;
     }); 
 }
 
@@ -357,7 +360,7 @@ exports.fractionalize = async function(req,res) {
     }  
 
     let tx = '0xasdfasdfasdfa';
-    await users.findOne({_id:req.decoded.user_id}, function (err, user) {
+    await users.findOne({_id:req.decoded.user_id}, async function (err, user) {
         if (err) {
             res.json({
                 status: false,
@@ -388,16 +391,16 @@ exports.fractionalize = async function(req,res) {
             //     req.body.duration,
             //     req.body.unit2); 
         } else {
-            // tx = await fractionalize(
-            //     user.private_key,
-            //     req.body.erc721Address,
-            //     req.body.erc721Id,
-            //     req.body.unit,
-            //     req.body.name,
-            //     req.body.symbol,
-            //     req.body.decimals,
-            //     req.body.price,
-            //     req.body.paymentToken);   
+            tx = await fractionalize(
+                user.private_key,
+                req.body.erc721Address,
+                req.body.erc721Id,
+                req.body.unit,
+                req.body.name,
+                req.body.symbol,
+                req.body.decimals,
+                req.body.price,
+                req.body.paymentToken);   
         }
         res.json({
             status: true,
@@ -421,8 +424,8 @@ exports.addFractions = async function(req,res) {
         return;
     }  
 
-    let fractionAddress = '0xasdfasdfasdfa';
-    await users.findOne({_id:req.decoded.user_id}, function (err, user) {
+    let fractionAddress = '';
+    await users.findOne({_id:req.decoded.user_id}, async function (err, user) {
         if (err) {
             res.json({
                 status: false,
@@ -438,7 +441,7 @@ exports.addFractions = async function(req,res) {
             });
             return;
         } 
-        // fractionAddress = await getFractionsAddress(user.private_key, req.body.type);
+        fractionAddress = await getFractionsAddress(user.private_key, req.body.type);
     });
 
     var fraction = new fractions();

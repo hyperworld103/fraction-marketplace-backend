@@ -16,7 +16,7 @@ const config = require('../../../helper/config')
 **/
 exports.createCollection = async function(public_key, private_key, name, symbol) {
     let w_result = '';
-    const infuraProvider = new ethers.providers.InfuraProvider('ropsten', '1ea7cae0ed014a7eb5a92d7720e1b039');
+    const infuraProvider = new ethers.providers.InfuraProvider('ropsten', config.infura.projectID);
     const wallet = new ethers.Wallet(private_key, infuraProvider);
     const signer = wallet.connect(infuraProvider);
 
@@ -28,12 +28,12 @@ exports.createCollection = async function(public_key, private_key, name, symbol)
         nonce: nonce,
         value: 0    
     };
-
     // Call the contract, getting back the transaction
     try {
-        let tx = await contract.createPrivateCollection(name, symbol, public_key, options)
-        await tx.wait()
+        let tx = await contract.createPrivateCollection(name, symbol, public_key, options);       
+        await tx.wait();
         w_result = await contract.getCollectionAddress();
+        // console.log(w_result);
     } catch(e) {
         console.log(e)
     }
