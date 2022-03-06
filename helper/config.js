@@ -35,13 +35,15 @@ const config = {
       eth_address: "0x0000000000000000000000000000000000000000", //mainnet: 0x0000000000000000000000000000000000000000
       eth: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
       usdc_address: "0x70cdfb73f78c51bf8a77b36c911d1f8c305d48e6", //mainnet: 0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48
-      collection_address: "0xd3f85df09Ae055b958270dD86B41b53160150982", //mainnet: 
+      collection_address: "0x32Fd26AC2F7F8f86E6b843d67ea91c5dD074e42D", //mainnet: 
+      fractions_address: "0x8CC4e4CE2F9a88F945cbA47f71FBfA4882C3ea85", //mainnet: 
+      auction_address: "0x0D3275e74DE43AB0D258A3a156BfD83E993be50b", //mainnet:
+      market_address: "0xD8c5Ba2D2DC9B7c465650a575db5F1EC50f8019F", //mainnet: 
+
       boxes_address: "0xBAf042634d86530CFE56B38831053138Db8455C7", //mainnet: 
-      fractions_address: "0x6BDCbd17F026FC15B16B0Ebc66a9b7c1D5159df7", //mainnet: 
       vault1_address: "0x45AfaBFFD6E783D576f54647338654c172241963", //mainnet: 
       vault2_address: "0x390F4FbFA2aB3E1CEE4450C6c610ba73E5a9caca", //mainnet: 
-      auction_address: "0x0D3275e74DE43AB0D258A3a156BfD83E993be50b", //mainnet: 
-      market_address: "0xD8c5Ba2D2DC9B7c465650a575db5F1EC50f8019F", //mainnet: 
+
       AUCTION: 'AUCTION',
       SET_PRICE: 'SET_PRICE',
       COLLECTIVE_PURCHASE: 'COLLECTIVE_PURCHASE'

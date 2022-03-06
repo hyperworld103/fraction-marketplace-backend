@@ -15,7 +15,8 @@ let erc20AuctionAbi = require('../../../abi/erc20NftfyAuction.json')
 let erc20Abi = require('../../../abi/erc20.json')
 const config = require('../../../helper/config')
 const { scale } = require('../../../helper/common')
-const { ethers, BigNumber } = require('ethers');
+const { ethers } = require('ethers');
+const {BigNumber} = require('bignumber.js')
 // const Web3 = require("web3");
 // const web3js = new Web3(new Web3.providers.HttpProvider(config.infura.base_url));
 
@@ -68,8 +69,11 @@ exports.createItem = async function(public_key, private_key, cid, token_id, coll
     // Call the contract, getting back the transaction
     try {
         const tx = await contract.mint(cid, public_key, options);
-        await tx.wait();
-        w_result = true;
+        const rc = await tx.wait();
+        const event = rc.events.find(event => event.event === 'Minted');
+        const [minter, tokenId] = event.args;  
+        w_result = tokenId;
+        console.log(w_result);
     } catch(e) {
         console.log(e)
     }
@@ -78,22 +82,29 @@ exports.createItem = async function(public_key, private_key, cid, token_id, coll
 }
 
 exports.fracApprove = async function(privateKey, address, tokenId, auction) {
-    let w_result = '';
+    let w_result;
     const infuraProvider = new ethers.providers.InfuraProvider('ropsten',config.infura.projectID);
     const wallet = new ethers.Wallet(privateKey, infuraProvider);
     const signer = wallet.connect(infuraProvider);
+    let nonce = await signer.getTransactionCount('latest', 'pending')
+
+    let options = {
+      gasLimit: 300000,
+      nonce: nonce,
+      value: 0    
+   };
+   console.log(config.infura.auction_address, tokenId, auction);
   try {
       let contractErc721 = new ethers.Contract(address, erc721Abi, signer);
       if(auction){
-        w_result = await contractErc721.approve(config.infura.auction_address, tokenId);
+        w_result = await contractErc721.approve(config.infura.auction_address, tokenId, options);
       } else {
-        w_result = await contractErc721.approve(config.infura.fractions_address, tokenId);
+        w_result = await contractErc721.approve(config.infura.fractions_address, tokenId, options);
       }
-
   } catch (e) {
     console.log(e)
   }
-
+  console.log(w_result);
   return w_result;
 }
 
@@ -105,7 +116,8 @@ exports.getFracApprove = async function(privateKey, address, tokenId, auction) {
   
   try {
     let contractErc721 = new ethers.Contract(address, erc721Abi, signer);
-    w_result = await contractErc721.methods.getApproved(tokenId);
+    w_result = await contractErc721.getApproved(tokenId);
+    console.log(w_result);
     if(auction) {
       w_result = w_result === config.infura.auction_address;
     } else {
@@ -160,10 +172,11 @@ exports.fractionalize = async function(privateKey, erc721Address, erc721Id, unit
       paymentTokenAddress === config.infura.eth ? config.infura.eth_address : paymentTokenAddress,
       options
     )
-    await tx.wait();
-    w_result='';
-    console.log(w_result);
-    
+    let rc = await tx.wait();
+    const event = rc.events.find(event => event.event === 'Fractionalize');
+    const [_from, _target, _tokenId, _fractions ] = event.args;  
+    w_result = _fractions;
+  
   } catch (e) {
     console.log(e)
   }
@@ -172,26 +185,41 @@ exports.fractionalize = async function(privateKey, erc721Address, erc721Id, unit
 }
 
 exports.auctionFractionalize = async function (privateKey, erc721Address, erc721Id, unit1, name, symbol, decimals, price, paymentTokenAddress, kickoff, duration, unit2){
+  
   let w_result = '';
   const infuraProvider = new ethers.providers.InfuraProvider('ropsten', config.infura.projectID);
+  console.log("auction start");
   const wallet = new ethers.Wallet(privateKey, infuraProvider);
+
   const signer = wallet.connect(infuraProvider);
+  let nonce = await signer.getTransactionCount('latest', 'pending')
+  
+  let options = {
+    gasLimit: 3000000,
+    nonce: nonce,
+    value: 0    
+  };
+
   try {
     let contractNftfy = new ethers.Contract(config.infura.auction_address, auctionFractionAbi, signer);
-    console.log(contractNftfy);
-    // w_result =   await contractNftfy.fractionalize(
-    //   erc721Address,
-    //   erc721Id,
-    //   name,
-    //   symbol,
-    //   decimals,
-    //   unit1,
-    //   price,
-    //   paymentTokenAddress === config.infura.eth ? config.infura.eth_address : paymentTokenAddress,
-    //   kickoff,
-    //   duration,
-    //   unit2
-    // )
+    tx =   await contractNftfy.fractionalize(
+      erc721Address,
+      erc721Id,
+      name,
+      symbol,
+      decimals,
+      unit1,
+      price,
+      paymentTokenAddress === config.infura.eth ? config.infura.eth_address : paymentTokenAddress,
+      kickoff,
+      duration,
+      unit2,
+      options
+    )
+    let rc = await tx.wait();
+    const event = rc.events.find(event => event.event === 'Fractionalize');
+    const [_from, _target, _tokenId, _fractions ] = event.args;  
+    w_result = _fractions;
   } catch (e) {
     console.log(e)
   }
@@ -279,6 +307,7 @@ exports.excecQuery = async function (privateKey, item) {
 }
 
 exports.marketplaceExecuteQuery = async function (privateKey, item, activeFilters=null) {
+
   if(!item.frac_id)
     return;
 
@@ -286,14 +315,23 @@ exports.marketplaceExecuteQuery = async function (privateKey, item, activeFilter
   const wallet = new ethers.Wallet(privateKey, infuraProvider);
   const signer = wallet.connect(infuraProvider);
 
+  let nonce = await signer.getTransactionCount('latest', 'pending')
+  
+  let options = {
+    gasLimit: 3000000,
+    nonce: nonce,
+    value: 0    
+  };
+
   let contractERC20share
   if(item.frac_id.type == "set_price")
     contractERC20share = new ethers.Contract(item.frac_id.fractionAddress, erc20SharesAbi, signer)
   else
     contractERC20share = new ethers.Contract(item.frac_id.fractionAddress, erc20AuctionAbi, signer) 
   
-  let w_status = await contractERC20share.methods.status()
-  
+  let w_status = await contractERC20share.status(options)
+
+
   if(w_status == 'PAUSE')
     w_status = 'PAUSE_OR_OFFER'
   else if(w_status == 'OFFER' && item.frac_id.type == 'set_price')
@@ -324,28 +362,37 @@ exports.marketplaceExecuteQuery = async function (privateKey, item, activeFilter
   if(item.frac_id.type == 'set_price')
     w_type = config.infura.SET_PRICE
 
-  let w_vaultBalance = await contractERC20share.methods.vaultBalance()
+  let w_vaultBalance = (await contractERC20share.vaultBalance()).toString();
+  
   w_vaultBalance = scale(new BigNumber(w_vaultBalance), -item.frac_id.decimals).toString()
 
-  let w_released = await contractERC20share.methods.released()
+  let w_released = (await contractERC20share.released()).toString()
+  let w_totalSupply = (await contractERC20share.totalSupply()).toString()
 
-  let w_totalSupply = await contractERC20share.methods.totalSupply()
   w_totalSupply = scale(new BigNumber(w_totalSupply), -item.frac_id.decimals).toString()
 
   let w_cutoff = -1
   if(item.frac_id.type == "auction") {
-    w_cutoff = await contractERC20share.methods.cutoff()
+    w_cutoff = await contractERC20share.cutoff()
     if(~w_cutoff < 0)
       w_cutoff = ~w_cutoff
   }
 
-  let contractERC20 = new ethers.Contract(item.frac_id.paymentToken, erc20Abi, signer)
+  let w_payment_decimals, w_payment_name, w_payment_symbol;
+  if(item.frac_id.paymentToken == '0x0000000000000000000000000000000000000000') {
+    w_payment_symbol = 'ETH'
+    w_payment_decimals = 18
+    w_payment_name = 'Ether'
+  } else  {
+    let contractERC20 = new ethers.Contract(item.frac_id.paymentToken, erc20Abi, signer)
 
-  let w_payment_symbol = await contractERC20.methods.symbol()
-  let w_payment_decimals = await contractERC20.methods.decimals()
-  let w_payment_name = await contractERC20.methods.decimals()
+    w_payment_symbol = await contractERC20.symbol()
+    w_payment_decimals = await contractERC20.decimals()
+    w_payment_name = await contractERC20.name()
+  }
   
-  let w_reservePrice = await contractERC20share.methods.reservePrice()
+  console.log(w_payment_decimals, w_payment_name, w_payment_symbol)
+  let w_reservePrice = (await contractERC20share.reservePrice()).toString()
 
   w_reservePrice = scale(new BigNumber(w_reservePrice), -w_payment_decimals).toString()
   let w_sharePrice = scale(new BigNumber(item.frac_id.fractionPrice), -(w_payment_decimals - item.frac_id.decimals)).toString()
@@ -377,7 +424,7 @@ exports.marketplaceExecuteQuery = async function (privateKey, item, activeFilter
     target: {
       id: item._id,
       tokenId: item.token_id,
-      tokenURI: 'https://io/ipfs/' + item.cid,
+      tokenURI: 'https://ipfs.io/ipfs/' + item.cid,
       collection: {
         id: item.collection_id.contract_address,
         name: item.collection_id.name

@@ -48,14 +48,11 @@ exports.getBalances = async function(address) {
 **/
 exports.getErc20Balances = async function(address, erc20Address) {
 	let w_balance = 0;
-	if(erc20Address == config.infura.usdc_address) {
-		// let contract = new web3js.eth.Contract(usdcAbi, config.infura.usdc_address);
-		// w_balance = await contract.methods.balanceOf(address).call()
-		w_balance = 10000000;
+	if(erc20Address == '0x0000000000000000000000000000000000000000') {
+		w_balance = web3js.eth.getBalance(address);
 	} else {
-		// let contractERC20 = new web3js.eth.Contract(erc20Abi, erc20Address)
-		// w_balance = await contractERC20.methods.balanceOf(address).call()
-		w_balance = 200000000000000000000;
+		let contractERC20 = new web3js.eth.Contract(erc20Abi, erc20Address)
+		w_balance = await contractERC20.methods.balanceOf(address).call()
 	}
 	return w_balance;
 }

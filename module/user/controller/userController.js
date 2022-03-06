@@ -609,6 +609,7 @@ exports.getBalances = async function(req, res) {
 */
 exports.getErc20Balances = async function(req, res) {
     let erc20Address = req.body.erc20Address ? req.body.erc20Address : '';
+
     let w_result = await getErc20Balances(req.decoded.public_key, erc20Address);
     res.json({
         status: true,

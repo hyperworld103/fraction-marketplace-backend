@@ -25,7 +25,7 @@ var Web3 = require('web3');
 var web3 = new Web3(new Web3.providers.HttpProvider(config.eth_http));
 var cp = require('child_process');
 var mailer = require('./../../common/controller/mailController'); 
-const { createItem, generateTokenId, fracApprove, fractionalize, auctionFractionalize, getFractionsAddress, excecQuery, marketplaceExecuteQuery } = require('./../infura/itemInfura');
+const { createItem, generateTokenId, fracApprove, fractionalize, auctionFractionalize, getFractionsAddress, excecQuery, marketplaceExecuteQuery,getFracApprove } = require('./../infura/itemInfura');
 
 
 /*************************************************************
@@ -125,8 +125,7 @@ exports.add = async function(req,res) {
     });
     let token_id='';
     try {
-        await createItem(_user.public_key, _user.private_key, item.cid, token_id, collection_address)
-        token_id = await generateTokenId(_user.private_key, collection_address, item_count);
+        token_id = await createItem(_user.public_key, _user.private_key, item.cid, token_id, collection_address)
     } catch(err) {
         res.json({
             status: false,
@@ -260,7 +259,7 @@ exports.list = function(req,res) {
 * This is the function which used to approve for fraction and fraction auction
 *****************************************************************************/
 exports.fractionApprove = async function(req,res) {
-    await users.findOne({_id:req.decoded.user_id}, function (err, user) {
+    await users.findOne({_id:req.decoded.user_id}, async function (err, user) {
         if (err) {
             res.json({
                 status: false,
@@ -276,8 +275,9 @@ exports.fractionApprove = async function(req,res) {
             });
             return;
         } 
-        // let tx = await fracApprove( user.private_key, req.body.address, req.body.tokenId);
-        let tx = 'true';
+        console.log(req.body.auction);
+        let tx = await fracApprove( user.private_key, req.body.address, req.body.tokenId, req.body.auction);
+        
         if(tx) {
             res.json({
                 status: true,
@@ -298,7 +298,7 @@ exports.fractionApprove = async function(req,res) {
 * This is the function which used to get approve status for fraction and fraction auction
 *****************************************************************************/
 exports.getFractionApprove = async function(req,res) {
-    await users.findOne({_id:req.decoded.user_id}, function (err, user) {
+    await users.findOne({_id:req.decoded.user_id}, async function (err, user) {
         if (err) {
             res.json({
                 status: false,
@@ -314,8 +314,9 @@ exports.getFractionApprove = async function(req,res) {
             });
             return;
         } 
-        // let isApproved = await getFracApprove( user.private_key, req.body.address, req.body.tokenId, req.body.auction);
-        let isApproved = true;
+        console.log(req.body.address, req.body.tokenId);
+        let isApproved = await getFracApprove( user.private_key, req.body.address, req.body.tokenId, req.body.auction);
+        
         if(isApproved) {
             res.json({
                 status: true,
@@ -359,8 +360,10 @@ exports.fractionalize = async function(req,res) {
         return;
     }  
 
-    let tx = '0xasdfasdfasdfa';
-    await users.findOne({_id:req.decoded.user_id}, async function (err, user) {
+    let fractionAddress = '';
+    let _user = {};
+
+    await users.findOne({_id:req.decoded.user_id}, function (err, user) {
         if (err) {
             res.json({
                 status: false,
@@ -376,23 +379,27 @@ exports.fractionalize = async function(req,res) {
             });
             return;
         } 
+        _user = user;       
+    });
+
+    try{
         if(req.body.type == 'auction'){
-            // tx = await auctionFractionalize(
-            //     user.private_key,
-            //     req.body.erc721Address,
-            //     req.body.erc721Id,
-            //     req.body.unit1,
-            //     req.body.name,
-            //     req.body.symbol,
-            //     req.body.decimals,
-            //     req.body.price,
-            //     req.body.paymentToken,
-            //     req.body.kickoff,
-            //     req.body.duration,
-            //     req.body.unit2); 
+            fractionAddress = await auctionFractionalize(
+                _user.private_key,
+                req.body.erc721Address,
+                req.body.erc721Id,
+                req.body.unit1,
+                req.body.name,
+                req.body.symbol,
+                req.body.decimals,
+                req.body.price,
+                req.body.paymentToken,
+                req.body.kickoff,
+                req.body.duration,
+                req.body.unit2); 
         } else {
-            tx = await fractionalize(
-                user.private_key,
+            fractionAddress = await fractionalize(
+                _user.private_key,
                 req.body.erc721Address,
                 req.body.erc721Id,
                 req.body.unit,
@@ -402,12 +409,71 @@ exports.fractionalize = async function(req,res) {
                 req.body.price,
                 req.body.paymentToken);   
         }
+    } catch(err) {
         res.json({
-            status: true,
-            message: "Transaction Confirmed",
-            result: tx
+            status: false,
+            message: "Transaction failed",
+            errors:err
         });
-    });
+        return;
+    }
+
+    console.log(fractionAddress);
+
+    var fraction = new fractions();
+    fraction.item_id = req.body.item_id;
+    fraction.name = req.body.name;
+    fraction.symbol = req.body.symbol;
+    fraction.decimals = req.body.decimals;
+    fraction.fractionCount = req.body.totalSupply;
+    fraction.fractionPrice = req.body.price;
+    fraction.fractionAddress = fractionAddress;
+    fraction.paymentToken = req.body.paymentToken;
+    fraction.type = req.body.type;
+    fraction.chainId = req.body.chainId;
+
+    if(fraction.type == 'auction'){
+        fraction.fee = req.body.fee;
+        fraction.days = req.body.days;
+    }
+    items.findOne({_id:req.body.item_id}, function (err, item) {
+        if (err || !item) {
+            res.json({
+                status: false,
+                message: "Item not found",
+                errors:err
+            });
+            return;
+        }
+        fraction.collection_id = item.collection_id;
+        fraction.save(function (err ,fractionObj) {
+            if (err) {
+                res.json({
+                    status: false,
+                    message: "Request failed",
+                    errors:err
+                });
+                return;
+            }
+            item.frac_id = fractionObj._id;
+            item.save(function (err ,itemObj) {
+                if (err) {
+                    console.log(err)
+                    res.json({
+                        status: false,
+                        message: "Item not saved",
+                        errors:err
+                    });
+                    return;
+                }
+                res.json({
+                    status: true,
+                    message: "fractionalized successfully",
+                    result: fractionObj
+                });
+            });
+        })
+    })
 }
 
 /***************************************************************
@@ -617,7 +683,7 @@ exports.fractionMarketList = async function(req,res) {
     query = query.sort('create_date');
 
     let privateKey = '';
-    await users.findOne({_id:req.decoded.user_id}, function (err, user) {
+    await users.findOne({_id:req.decoded.user_id}, async function (err, user) {
         if (err) {
             res.json({
                 status: false,
@@ -637,47 +703,14 @@ exports.fractionMarketList = async function(req,res) {
     });
 
     var fields = ['token_id', 'cid']
-    items.find(query, fields,{skip: offset, limit: paginationLimit}).populate('collection_id').populate('frac_id').then(function (result) {
-        let erc20Items = []
-        for (let w_cnt = 0; w_cnt < result.length; w_cnt++) {
-        // let w_erc20Item = await marketplaceExecuteQuery(privateKey, w_items[w_cnt], activeFilters)
-        let w_erc20Item = {
-            id: 'item.frac_id.fractionAddress',
-            name: 'item.frac_id.name',
-            symbol: 'IFIS',
-            decimals: 6,
-            exitPrice: 200000000000,
-            released: true,
-            timestamp: 12323435634,
-            sharePrice: 1000000000,
-            sharesCount: 100,
-            totalSupply: 210000000,
-            vaultBalance: 10,
-            type: 'SET_PRICE',
-            status: 'OFFER',
-            cutoff: 10,
-            minimumDuration: 1,
-            bids: [],
-            paymentToken: {
-                id: 'item.frac_id.paymentToken',
-                name: 'mytoken',
-                symbol: 'MTK',
-                decimals: 18
-            },
-            target: {
-                id: 'item._id',
-                tokenId: 'item.token_id',
-                tokenURI: 'https://ipfs.io/ipfs/' + 'item.cid',
-                collection: {
-                id: 'item.collection_id.contract_address',
-                name: 'item.collection_id.name'
-                }
-            }
-            }
-        if(!!w_erc20Item)
-            erc20Items.push(w_erc20Item)
-
+    items.find(query, fields,{skip: offset, limit: paginationLimit}).populate('collection_id').populate('frac_id').then(async function (result) {
+        let erc20Items = [];
+        console.log(result);
+        for (let i = 0; i < result.length; i++) {
+            let w_erc20Item = await marketplaceExecuteQuery(privateKey, result[i], activeFilters)           
+            if(!!w_erc20Item) erc20Items.push(w_erc20Item)
         }
+        console.log(erc20Items);
         res.json({
             status: true,
             message: "fracs retrieved successfully",
@@ -689,10 +722,28 @@ exports.fractionMarketList = async function(req,res) {
 /************************************************************************
 * This is the function which used to get frac of target item in database
 ************************************************************************/
-exports.fractionGet = async function(req,res) {
-    var itemId = req.body.target;
-    var query = items.find();
+exports.fractionGet = async function(req, res) {
+    var itemId;
     
+    await fractions.findOne({fractionAddress: req.body.frac_addr}, function(err, fraction) {
+        if (err) {
+            res.json({
+                status: false,
+                message: "Request failed",
+                errors:err
+            });
+            return;
+        }
+        if(this.isEmptyObject(fraction)) {
+            res.json({
+                status: false,
+                message: "User not found",
+            });
+            return;
+        } 
+        itemId = fraction.item_id;
+    })
+    var query = items.find();
     query = query.where('_id',itemId)
     let privateKey = '';
     await users.findOne({_id:req.decoded.user_id}, function (err, user) {
@@ -714,41 +765,8 @@ exports.fractionGet = async function(req,res) {
         privateKey = user.private_key;
     });
     var fields = ['token_id', 'cid']
-    items.find(query, fields).populate('collection_id').populate('frac_id').then(function (result) {
-        // let w_erc20Item = await marketplaceExecuteQuery(privateKey, result[0])
-        let w_erc20Item = {
-            id: 'item.frac_id.fractionAddress',
-            name: 'item.frac_id.name',
-            symbol: 'IFIS',
-            decimals: 6,
-            exitPrice: 200000000000,
-            released: true,
-            timestamp: 12323435634,
-            sharePrice: 1000000000,
-            sharesCount: 100,
-            totalSupply: 210000000,
-            vaultBalance: 10,
-            type: 'SET_PRICE',
-            status: 'OFFER',
-            cutoff: 10,
-            minimumDuration: 1,
-            bids: [],
-            paymentToken: {
-              id: 'item.frac_id.paymentToken',
-              name: 'mytoken',
-              symbol: 'MTK',
-              decimals: 18
-            },
-            target: {
-              id: 'item._id',
-              tokenId: 'item.token_id',
-              tokenURI: 'https://ipfs.io/ipfs/' + 'item.cid',
-              collection: {
-                id: 'item.collection_id.contract_address',
-                name: 'item.collection_id.name'
-              }
-            }
-          }
+    items.find(query, fields).populate('collection_id').populate('frac_id').then(async function (result) {
+        let w_erc20Item = await marketplaceExecuteQuery(privateKey, result[0])
         res.json({
             status: true,
             message: "frac retrieved successfully",

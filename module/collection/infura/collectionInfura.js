@@ -31,9 +31,11 @@ exports.createCollection = async function(public_key, private_key, name, symbol)
     // Call the contract, getting back the transaction
     try {
         let tx = await contract.createPrivateCollection(name, symbol, public_key, options);       
-        await tx.wait();
-        w_result = await contract.getCollectionAddress();
-        // console.log(w_result);
+        let rc = await tx.wait();
+        const event = rc.events.find(event => event.event === 'NewCollection');
+        const [collectionAddr, to] = event.args;
+        w_result = collectionAddr;
+        console.log(w_result);
     } catch(e) {
         console.log(e)
     }
