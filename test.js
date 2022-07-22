@@ -13,7 +13,6 @@ async function run() {
     const wallet = new ethers.Wallet(private_key, provider);
     const signer = wallet.connect(provider);
     
-    /*
     let contract = new ethers.Contract(config.infura.collection_address, minterAbi, signer);
     
     try {
@@ -25,7 +24,7 @@ async function run() {
     } catch(e) {
         console.log(e);
     }
-    */
+
    let collection_address = '0x05979869c12a868b36C94d15A4029A49f01Ef1B6';
     let contract = new ethers.Contract(collection_address, collectionAbi, signer);
     let nonce = await signer.getTransactionCount('latest', 'pending')
